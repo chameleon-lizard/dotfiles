@@ -3,8 +3,22 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # Border configuration
-default_border pixel 3
-# border_radius 3
+set $thick 2
+
+# DEFAULT BORDER
+for_window [class="^.*"] border pixel $thick
+for_window [title="^.*"] border pixel $thick
+
+# APPLICATION BORDERS
+for_window [class="Emacs"] border pixel $thick
+for_window [class="URxvt"] border pixel $thick
+for_window [class="st"] border pixel $thick
+#for_window [class="XTerm"] border pixel $thick
+
+smart_borders on
+
+# FLOATING APPLICATIONS
+for_window [class="Nautilus"] floating enable
 
 set $mod Mod4
 
@@ -27,6 +41,15 @@ client.background       $bg
 
 # PROTIP: You can also dynamically set dmenu's colors this way:
 bindsym $mod+d exec rofi -show run
+
+# Reloading Telegram
+bindsym $mod+Shift+t exec killall telegram-deskto && telegram-desktop
+
+# Changing screen output
+bindsym $mod+Shift+w exec sh ~/Scripts/autostart_screen.sh
+
+# Changing theme
+bindsym $mod+Shift+z exec sh ~/Scripts/random_wallpapers.sh
 
 # Locker
 bindsym $mod+l exec sh ~/Scripts/my-i3lock-config.sh
@@ -63,8 +86,11 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec xfce4-terminal
 
-# Make a screenshot
-bindsym Print exec scrot -e 'mv $f ~/Pictures/Screenshots/'
+# Multi-screen screenshots with scrot
+bindsym --release Print exec scrot 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/Screenshots && mv $f ~/Pictures/Screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/Screenshots/`ls -1 -t ~/Pictures/Screenshots | head -1`'
+
+# OSX-like area selection screenshots
+bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/Screenshots && mv $f ~/Pictures/Screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/Screenshots/`ls -1 -t ~/Pictures/Screenshots | head -1`' 
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -81,6 +107,8 @@ bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
+
+
 
 # move focused window
 bindsym $mod+Shift+j move left
@@ -191,6 +219,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Changing workspaces
+bindsym $mod+Shift+Tab workspace prev
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Control+Tab move to workspace prev
+bindsym $mod+Control+Tab move to workspace next
+
 # Moving workspaces between screens 
 bindsym $mod+p move workspace to output right
 
@@ -199,8 +233,8 @@ bindsym $mod+p move workspace to output right
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Initial commands that execute on i3 start.
-exec_always --no-startup-id sh ~/.config/i3/.autostart_screen.sh
+exec_always --no-startup-id gebaard -b
+exec_always --no-startup-id sh ~/Scripts/autostart_screen.sh
 exec_always --no-startup-id compton
 exec_always --no-startup-id setxkbmap -layout "us,ru" -option "grp:alt_space_toggle"
-exec_always --no-startup-id sh ~/Scripts/random_wallpapers.sh
 exec_always --no-startup-id kdeconnect-cli
