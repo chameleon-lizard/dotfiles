@@ -1,0 +1,19 @@
+[commands.swipe.three]
+left_up = ""
+right_up = ""
+up = ""
+left_down = ""
+right_down = ""
+down = ""
+left = "xdotool key 'Super+shift+Tab'"
+right = "xdotool key 'Super+Tab'"
+
+[commands.swipe.four]
+left_up = ""
+right_up = ""
+up = "rofi -show run"
+left_down = ""
+right_down = ""
+down = ""
+left = "xdotool key 'Super+shift+control+Tab'"
+right = "xdotool key 'Super+control+Tab'"
